@@ -1,0 +1,28 @@
+{
+  "name": "tp-typescript-harrypotter",
+  "version": "1.0.0",
+  "description": "TP TypeScript - Hogwarts Academy (Generics, Utility Types, Decorators, Type Guards)",
+  "main": "dist/main.js",
+  "scripts": {
+    "start": "tsx src/main.ts",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx src/main.ts"
+  },
+  "keywords": [
+    "typescript",
+    "decorators",
+    "generics",
+    "type-guards",
+    "utility-types",
+    "harry-potter"
+  ],
+  "author": "Chaymae Amouri",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/node": "^22.19.14",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}

@@ -1,0 +1,23 @@
+# Dépendances
+node_modules/
+
+# Compilation
+dist/
+
+# Fichiers temporaires & logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Fichiers d'extraction PDF temporaires
+scratch_images/
+extract_pdf.mjs
+pdf1_text.txt
+pdf2_text.txt
+
+# Système & IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
