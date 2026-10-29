@@ -1,11 +1,3 @@
-/**
- * Legacy TypeScript method decorators.
- * Nécessite "experimentalDecorators": true dans tsconfig.json.
- */
-
-/**
- * Décorateur de journalisation des appels de méthodes.
- */
 export function Log(
   target: object,
   propertyKey: string | symbol,
@@ -32,9 +24,6 @@ export function Log(
   };
 }
 
-/**
- * Décorateur pour mesurer le temps d'exécution d'une méthode.
- */
 export function MeasureTime(
   target: object,
   propertyKey: string | symbol,
@@ -60,10 +49,6 @@ export function MeasureTime(
   };
 }
 
-/**
- * Exercice 4 — Validation de la puissance d'un sort
- * Rejette un sort lorsque sa puissance (power) est inférieure à 0.
- */
 export function ValidateSpellPower(
   target: object,
   propertyKey: string | symbol,
@@ -90,11 +75,6 @@ export function ValidateSpellPower(
   };
 }
 
-/**
- * Exercice 5 — Décorateur de mise en cache
- * Évite de recalculer le même résultat lorsqu'une méthode reçoit plusieurs fois les mêmes arguments.
- * Met en cache les résultats séparément pour chaque instance d'objet via une WeakMap.
- */
 export function Cache(
   target: object,
   propertyKey: string | symbol,
@@ -124,7 +104,4 @@ export function Cache(
   };
 }
 
-/**
- * Alias pour la rétrocompatibilité
- */
 export const Memoize = Cache;

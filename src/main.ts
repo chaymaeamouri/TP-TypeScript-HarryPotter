@@ -18,11 +18,6 @@ import {
 import { WizardRepository, SpellRepository } from "./repository";
 import { Log, Cache } from "./decorators";
 
-// ============================================================================
-// Exercice 6 — Renforcer le Type Guard
-// ============================================================================
-
-// Étape 1 : Liste immuable des maisons valides de Poudlard et Type Guard isHouse
 const validHouses: readonly House[] = [
   "Gryffindor",
   "Slytherin",
@@ -37,7 +32,6 @@ export function isHouse(value: unknown): value is House {
   );
 }
 
-// Étape 2 : Type Guard isWizard utilisant isHouse pour interdire des maisons invalides (ex. Durmstrang)
 export function isWizard(value: unknown): value is Wizard {
   if (typeof value !== "object" || value === null) {
     return false;
@@ -54,17 +48,9 @@ export function isWizard(value: unknown): value is Wizard {
   );
 }
 
-// ============================================================================
-// Exercice 3 — Gestionnaire d'événements de lancement de sorts (Extract)
-// ============================================================================
-
 export function handleSpellCast(event: SpellCastEvent): void {
   console.log(`Wizard ${event.wizardId} cast ${event.spellName}`);
 }
-
-// ============================================================================
-// Exercice 5 — Service avec méthode mise en cache (@Cache)
-// ============================================================================
 
 export class SpellCalculator {
   @Cache
@@ -73,10 +59,6 @@ export class SpellCalculator {
     return basePower * multiplier;
   }
 }
-
-// ============================================================================
-// Service d'Académie illustrant les fonctionnalités de haut niveau
-// ============================================================================
 
 export class AcademyService {
   constructor(
@@ -96,16 +78,10 @@ export class AcademyService {
     return `${wizard.name} casts ${spell.name}!`;
   }
 
-  /**
-   * Exercice 1 : Enregistrer un assistant à l'aide de NewWizard
-   */
   registerWizard(newWizard: NewWizard): Wizard {
     return this.wizards.register(newWizard);
   }
 
-  /**
-   * Exercice 2 : Filtrer par maison à l'aide du service
-   */
   findByHouse(house: House): WizardSummary[] {
     return this.wizards
       .findByHouse(house)
@@ -123,25 +99,17 @@ export class AcademyService {
   }
 }
 
-// ============================================================================
-// EXÉCUTION DES TESTS ET DÉMONSTRATIONS DU TP
-// ============================================================================
-
 console.log("=================================================");
 console.log(" TP TypeScript - Hogwarts Academy");
 console.log(" Chaymae Amouri - GI 5e année - Groupe A");
 console.log("=================================================\n");
 
-// ----------------------------------------------------------------------------
-// Exercice 1 — Ajouter un nouveau sorcier (NewWizard & auto-id)
-// ----------------------------------------------------------------------------
 console.log("--- Exercice 1 : Ajouter un nouveau sorcier (NewWizard) ---");
 
 const wizardRepo = new WizardRepository();
 const spellRepo = new SpellRepository();
 const academy = new AcademyService(wizardRepo, spellRepo);
 
-// Enregistrement sans ID fourni par l'appelant via NewWizard (Omit<Wizard, "id">)
 const harry = wizardRepo.register({
   name: "Harry Potter",
   house: "Gryffindor",
@@ -176,9 +144,6 @@ console.log("Sorcier enregistré avec ID auto :", harry);
 console.log("Tous les sorciers dans le repository :", wizardRepo.getAll());
 console.log();
 
-// ----------------------------------------------------------------------------
-// Exercice 2 — Filtrer les sorciers par maison (Wizard["house"])
-// ----------------------------------------------------------------------------
 console.log("--- Exercice 2 : Filtrer les sorciers par maison ---");
 
 const gryffindors = wizardRepo.findByHouse("Gryffindor");
@@ -188,19 +153,14 @@ const slytherins = academy.findByHouse("Slytherin");
 console.log("Sorciers de Slytherin (Service) :", slytherins);
 console.log();
 
-// ----------------------------------------------------------------------------
-// Exercice 3 — Événements de sorts avec Extract<AcademyEvent, { type: 'spell-cast' }>
-// ----------------------------------------------------------------------------
 console.log("--- Exercice 3 : Événements de lancement de sorts (Extract) ---");
 
-// Test direct du gestionnaire d'événement (Slide 67)
 handleSpellCast({
   type: "spell-cast",
   wizardId: 1,
   spellName: "Expelliarmus",
 });
 
-// Test avec une liste mixte d'événements de l'académie
 const events: AcademyEvent[] = [
   { type: "spell-cast", wizardId: harry.id, spellName: "Expelliarmus" },
   { type: "level-up", wizardId: hermione.id, newLevel: 9 },
@@ -213,12 +173,8 @@ const spellEvents = academy.getSpellEvents(events);
 console.log(`Événements spell-cast extraits (${spellEvents.length}) :`, spellEvents);
 console.log();
 
-// ----------------------------------------------------------------------------
-// Exercice 4 — Validation de la puissance d'un sort (@ValidateSpellPower)
-// ----------------------------------------------------------------------------
 console.log("--- Exercice 4 : Validation de la puissance d'un sort ---");
 
-// Sort valide (Slide 70)
 spellRepo.add({
   id: 101,
   name: "Expelliarmus",
@@ -234,7 +190,6 @@ spellRepo.add({
 });
 console.log("Sort valide 'Protego' (power 50) ajouté avec succès.");
 
-// Sort non valide : puissance négative (Slide 70)
 try {
   console.log("Tentative d'ajout d'un sort avec une puissance négative (-10)...");
   spellRepo.add({
@@ -252,9 +207,6 @@ try {
 console.log("Sorts enregistrés :", spellRepo.getAll());
 console.log();
 
-// ----------------------------------------------------------------------------
-// Exercice 5 — Décorateur de méthode avec mise en cache (@Cache)
-// ----------------------------------------------------------------------------
 console.log("--- Exercice 5 : Décorateur de méthode avec mise en cache ---");
 
 const calculator = new SpellCalculator();
@@ -269,13 +221,10 @@ console.log("3e appel (5, 2) [nouveaux arguments] :");
 console.log("Résultat :", calculator.calculatePower(5, 2));
 console.log();
 
-// ----------------------------------------------------------------------------
-// Exercice 6 — Renforcement du Type Guard (isHouse & isWizard)
-// ----------------------------------------------------------------------------
 console.log("--- Exercice 6 : Type Guards stricts ---");
 
-console.log(`isHouse("Gryffindor") =`, isHouse("Gryffindor")); // true
-console.log(`isHouse("Durmstrang") =`, isHouse("Durmstrang")); // false
+console.log(`isHouse("Gryffindor") =`, isHouse("Gryffindor"));
+console.log(`isHouse("Durmstrang") =`, isHouse("Durmstrang"));
 
 const validData: unknown = {
   id: 1,
@@ -293,23 +242,18 @@ const invalidData: unknown = {
   active: true,
 };
 
-console.log("isWizard(validData)   [Gryffindor] =", isWizard(validData));   // true
-console.log("isWizard(invalidData) [Durmstrang] =", isWizard(invalidData)); // false
+console.log("isWizard(validData)   [Gryffindor] =", isWizard(validData));
+console.log("isWizard(invalidData) [Durmstrang] =", isWizard(invalidData));
 
 if (isWizard(validData)) {
   console.log(`Sorcier validé : ${validData.name} de la maison ${validData.house}`);
 }
 console.log();
 
-// ----------------------------------------------------------------------------
-// Démonstrations complémentaires (Generics, Utility Types, Conditional Types)
-// ----------------------------------------------------------------------------
 console.log("--- Démonstrations complémentaires (Generics & Types avancés) ---");
 
-// Appel de castSpell avec décorateur @Log
 console.log(academy.castSpell(harry.id, 101));
 
-// Démonstration du Record Utility Type
 const points: HousePoints = {
   Gryffindor: 150,
   Slytherin: 120,
@@ -318,13 +262,12 @@ const points: HousePoints = {
 };
 console.log("House Points (Record<House, number>) :", points);
 
-// Vérifications de types au niveau de la compilation
 type CastArguments = Parameters<AcademyService["castSpell"]>;
 type CastResult = ReturnType<AcademyService["castSpell"]>;
-type AttackOutput = SpellOutput<"attack">; // number
-type DefenseOutput = SpellOutput<"defense">; // boolean
-type HealingOutput = SpellOutput<"healing">; // string
-type SpellItem = ArrayElement<Spell[]>; // Spell
+type AttackOutput = SpellOutput<"attack">;
+type DefenseOutput = SpellOutput<"defense">;
+type HealingOutput = SpellOutput<"healing">;
+type SpellItem = ArrayElement<Spell[]>;
 type AttackSpellExample = AttackSpell;
 type RemainingCategories = NonHealingCategory;
 type CategoryExample = SpellCategory;
